@@ -53,4 +53,34 @@ const findById = async (req, res) => {
     res.send(user)
 }
 
-module.exports = { create, findAll, findById }
+const update = async (req, res) => {
+    const { name, username, email, password, avatar, background } = req.body
+    if (!name && !username && !email && !password && !avatar && !background) {
+        res.status(400)
+            .send({ message: "Submit at least one field for update, please." })
+    }
+
+    const id = req.params.id
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({ message: "Id invalido" })
+    }
+
+    const user = await userService.findById(id)
+    if (!user) {
+        return res.status(400).send({ message: "Usuario nao encontrado" })
+    }
+
+    await userService.update(
+        id,
+        name,
+        username,
+        email,
+        password,
+        avatar,
+        background
+    )
+
+    res.send({ message: "User updated sucessfully!" })
+}
+
+module.exports = { create, findAll, findById, update }
