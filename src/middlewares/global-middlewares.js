@@ -1,32 +1,37 @@
-const mongoose = require('mongoose')
-const userService = require('../services/user-service')
+import mongoose from 'mongoose'
+import userService from '../services/user-service.js'
 
-const validId = (req, res, next) => {
-    const id = req.params.id
+export const validId = (req, res, next) => {
+    try {
+        console.log("chegou valid id");
+        const id = req.params.id
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).send({ message: "Invalid id." })
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send({ message: "Invalid id." })
+        }
+        next()
+    } catch (error) {
+        console.log("aqui:", error);
+        res.status(500).send({ message: err.message })
     }
-
-    next()
 }
 
-const validUser = async (req, res, next) => {
-    const id = req.params.id
-    const user = await userService.findById(id)
+export const validUser = async (req, res, next) => {
+    try {
+        const id = req.params.id
+        const user = await userService.findById(id)
 
-    if (!user) {
-        res.status(400)
-            .send({ message: "User not found." })
-    } else {
-        req.id = id;
-        req.user = user;
+        if (!user) {
+            res.status(400)
+                .send({ message: "User not found." })
+        } else {
+            req.id = id;
+            req.user = user;
+        }
+        console.log("passou valid user");
+        next()
+    } catch (error) {
+        console.log("aqui2:", error);
+        res.status(500).send({ message: err.message })
     }
-
-    next()
 }
-
-
-
-
-module.exports = { validId, validUser }
