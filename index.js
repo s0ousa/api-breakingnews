@@ -3,7 +3,7 @@ import connectDatabase from './src/database/db.js'
 import userRoute from './src/routes/user-route.js'
 
 const app = express()
-const port = 3000
+const port = process.env.port || 3000
 
 connectDatabase()
 app.use(express.json());
