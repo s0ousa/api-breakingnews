@@ -2,7 +2,7 @@ import express from 'express'
 import connectDatabase from './src/database/db.js'
 
 import userRoute from './src/routes/user-route.js'
-import authRoute from './src/routes/auth-user.js'
+import authRoute from './src/routes/auth-route.js'
 import newsRoute from './src/routes/news-route.js'
 
 const app = express()
