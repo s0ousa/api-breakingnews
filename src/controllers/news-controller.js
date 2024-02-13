@@ -74,4 +74,32 @@ const findAll = async (req, res) => {
 
 }
 
-export { create, findAll }
+const topNews = async (req, res) => {
+
+    try {
+        const news = await newsService.topNews()
+
+        if (!news) {
+            return res.status(400).send({ message: "There is no registered post" })
+        }
+
+        res.send({
+            news: {
+                id: news._id,
+                title: news.title,
+                text: news.text,
+                banner: news.banner,
+                likes: news.likes,
+                coments: news.coments,
+                name: news.user.name,
+                username: news.user.username,
+                userAvatar: news.user.avatar
+            }
+        })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+
+}
+
+export { create, findAll, topNews }
