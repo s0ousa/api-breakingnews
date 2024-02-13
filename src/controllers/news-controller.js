@@ -2,21 +2,6 @@ import newsService from "../services/news-service.js"
 
 const create = async (req, res) => {
     try {
-
-        const { authorization } = req.headers
-        console.log(authorization) //tira dps
-
-        if (!authorization) {
-            return res.sendStatus(401)
-        }
-
-        parts = authorization.split(" ")
-        const [schema, token] = parts
-
-        if (parts.length !== 2 || schema !== "Bearer") {
-            return res.sendStatus(401)
-        }
-
         const { title, text, banner } = req.body
 
         if (!title || !text || !banner) {
@@ -29,7 +14,7 @@ const create = async (req, res) => {
             title,
             text,
             banner,
-            user: { _id: "65b57d671f8ad1e6f4743e9a" }
+            user: req.userId
         })
         res.sendStatus(201)
 
