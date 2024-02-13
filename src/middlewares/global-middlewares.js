@@ -3,7 +3,6 @@ import userService from '../services/user-service.js'
 
 export const validId = (req, res, next) => {
     try {
-        console.log("chegou valid id");
         const id = req.params.id
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -11,7 +10,7 @@ export const validId = (req, res, next) => {
         }
         next()
     } catch (error) {
-        console.log("aqui:", error);
+
         res.status(500).send({ message: err.message })
     }
 }
@@ -28,10 +27,9 @@ export const validUser = async (req, res, next) => {
             req.id = id;
             req.user = user;
         }
-        console.log("passou valid user");
+
         next()
     } catch (error) {
-        console.log("aqui2:", error);
         res.status(500).send({ message: err.message })
     }
 }
