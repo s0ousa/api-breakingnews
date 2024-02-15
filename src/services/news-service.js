@@ -8,6 +8,12 @@ const countNews = () => News.countDocuments()
 
 const topNews = () => News.findOne().sort({ _id: -1 }).populate("user")
 
+const searchByTitle = (title) => News.find({
+    title: { $regex: `${title || ""}`, $options: "i" },
+})
+    .sort({ _id: -1 })
+    .populate("user")
+
 const findAll = (offset, limit) =>
     News.find()
         .sort({ _id: -1 })
@@ -20,5 +26,6 @@ export default {
     findAll,
     countNews,
     topNews,
-    findById
+    findById,
+    searchByTitle
 }
