@@ -205,4 +205,23 @@ const update = async (req, res) => {
     }
 }
 
-export { create, findAll, topNews, findById, searchByTitle, byUser, update }
+const erase = async (req, res) => {
+    try {
+        const { id } = req.params
+        const news = await newsService.findById(id)
+        if (news.user._id != req.userId) {
+            return res.status(400).send({
+                message: "You didn't delete this post"
+            })
+        }
+
+        await newsService.erase(id)
+        return res.status(400).send({
+            message: "Foi pro inferno"
+        })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+export { create, findAll, topNews, findById, searchByTitle, byUser, update, erase }

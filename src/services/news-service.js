@@ -37,6 +37,7 @@ const update = (id, title, text, banner) =>
         { rawResult: true }
     )
 
+const erase = (id) => News.findOneAndDelete({ _id: id })
 
 export default {
     create,
@@ -46,5 +47,6 @@ export default {
     findById,
     searchByTitle,
     byUser,
-    update
+    update,
+    erase
 }
