@@ -30,6 +30,14 @@ const findAll = (offset, limit) =>
         .limit(limit)
         .populate("user")
 
+const update = (id, title, text, banner) =>
+    News.findOneAndUpdate(
+        { _id: id },
+        { title, text, banner, },
+        { rawResult: true }
+    )
+
+
 export default {
     create,
     findAll,
@@ -37,5 +45,6 @@ export default {
     topNews,
     findById,
     searchByTitle,
-    byUser
+    byUser,
+    update
 }

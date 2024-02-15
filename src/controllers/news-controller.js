@@ -176,4 +176,33 @@ const byUser = async (req, res) => {
     }
 }
 
-export { create, findAll, topNews, findById, searchByTitle, byUser }
+const update = async (req, res) => {
+    try {
+        const { title, text, banner } = req.body
+        const { id } = req.params
+
+        if (!title && !text && !banner) { // fazer um middleware depois(?)
+            res.status(400).send({
+                message: "Submit at least one field to update the post, please"
+            })
+        }
+
+        const news = await newsService.findById(id)
+
+        if (news.user._id != req.userId) {
+            return res.status(400).send({
+                message: "You didn't update this post"
+            })
+        }
+
+        await newsService.update(id, title, text, banner)
+        return res.status(400).send({
+            message: "Post sucessfully update"
+        })
+
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+export { create, findAll, topNews, findById, searchByTitle, byUser, update }
