@@ -6,13 +6,22 @@ const findById = (id) => News.findById(id).populate("user")
 
 const countNews = () => News.countDocuments()
 
-const topNews = () => News.findOne().sort({ _id: -1 }).populate("user")
+const topNews = () =>
+    News.findOne()
+        .sort({ _id: -1 })
+        .populate("user")
 
-const searchByTitle = (title) => News.find({
-    title: { $regex: `${title || ""}`, $options: "i" },
-})
-    .sort({ _id: -1 })
-    .populate("user")
+const byUser = (id) =>
+    News.find({ user: id })
+        .sort({ _id: -1 })
+        .populate("user")
+
+const searchByTitle = (title) =>
+    News.find({
+        title: { $regex: `${title || ""}`, $options: "i" },
+    })
+        .sort({ _id: -1 })
+        .populate("user")
 
 const findAll = (offset, limit) =>
     News.find()
@@ -27,5 +36,6 @@ export default {
     countNews,
     topNews,
     findById,
-    searchByTitle
+    searchByTitle,
+    byUser
 }
