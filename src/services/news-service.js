@@ -39,6 +39,18 @@ const update = (id, title, text, banner) =>
 
 const erase = (id) => News.findOneAndDelete({ _id: id })
 
+const likeNews = (idNews, userId) =>
+    News.findOneAndUpdate(
+        { _id: idNews, "likes.userId": { $nin: [userId] } },
+        { $push: { likes: { userId, created: new Date() } } }
+    )
+
+const deleteLikeNews = (idNews, userId) =>
+    News.findOneAndUpdate(
+        { _id: idNews },
+        { $pull: { likes: { userId } } }
+    )
+
 export default {
     create,
     findAll,
@@ -48,5 +60,7 @@ export default {
     searchByTitle,
     byUser,
     update,
-    erase
+    erase,
+    likeNews,
+    deleteLikeNews
 }

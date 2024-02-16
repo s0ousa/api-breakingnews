@@ -1,6 +1,6 @@
 import newsService from "../services/news-service.js"
 
-const create = async (req, res) => {
+export const create = async (req, res) => {
     try {
         const { title, text, banner } = req.body
 
@@ -24,7 +24,7 @@ const create = async (req, res) => {
 
 }
 
-const findAll = async (req, res) => {
+export const findAll = async (req, res) => {
     try {
         let { limit, offset } = req.query
         limit = Number(limit)
@@ -74,7 +74,7 @@ const findAll = async (req, res) => {
 
 }
 
-const findById = async (req, res) => {
+export const findById = async (req, res) => {
     try {
         const { id } = req.params
         const news = await newsService.findById(id)
@@ -97,7 +97,7 @@ const findById = async (req, res) => {
     }
 }
 
-const topNews = async (req, res) => {
+export const topNews = async (req, res) => {
 
     try {
         const news = await newsService.topNews()
@@ -125,7 +125,7 @@ const topNews = async (req, res) => {
 
 }
 
-const searchByTitle = async (req, res) => {
+export const searchByTitle = async (req, res) => {
     try {
         const { title } = req.query
 
@@ -153,7 +153,7 @@ const searchByTitle = async (req, res) => {
     }
 }
 
-const byUser = async (req, res) => {
+export const byUser = async (req, res) => {
     try {
         const id = req.userId
         const news = await newsService.byUser(id)
@@ -176,7 +176,7 @@ const byUser = async (req, res) => {
     }
 }
 
-const update = async (req, res) => {
+export const update = async (req, res) => {
     try {
         const { title, text, banner } = req.body
         const { id } = req.params
@@ -205,7 +205,7 @@ const update = async (req, res) => {
     }
 }
 
-const erase = async (req, res) => {
+export const erase = async (req, res) => {
     try {
         const { id } = req.params
         const news = await newsService.findById(id)
@@ -224,13 +224,20 @@ const erase = async (req, res) => {
     }
 }
 
-export {
-    create,
-    findAll,
-    topNews,
-    findById,
-    searchByTitle,
-    byUser,
-    update,
-    erase
+export const likeNews = async (req, res) => {
+    try {
+        const { id } = req.params
+        const userId = req.userId
+
+        const newsLiked = await newsService.likeNews(id, userId)
+
+        if (!newsLiked) {
+            await newsService.deleteLikeNews(id, userId)
+            return res.status(200).send({ message: "Like sucessfully removed" })
+        }
+
+        return res.status(200).send({ message: "Like done successfully" })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
 }
