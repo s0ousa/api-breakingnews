@@ -224,4 +224,13 @@ const erase = async (req, res) => {
     }
 }
 
-export { create, findAll, topNews, findById, searchByTitle, byUser, update, erase }
+export {
+    create,
+    findAll,
+    topNews,
+    findById,
+    searchByTitle,
+    byUser,
+    update,
+    erase
+}
