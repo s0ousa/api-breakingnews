@@ -86,7 +86,7 @@ export const findById = async (req, res) => {
                 text: news.text,
                 banner: news.banner,
                 likes: news.likes,
-                coments: news.coments,
+                comments: news.comments,
                 name: news.user.name,
                 username: news.user.username,
                 userAvatar: news.user.avatar
@@ -237,6 +237,50 @@ export const likeNews = async (req, res) => {
         }
 
         return res.status(200).send({ message: "Like done successfully" })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+export const addComment = async (req, res) => {
+    try {
+        const { id } = req.params
+        const userId = req.userId
+        const { comment } = req.body
+
+        if (!comment) {
+            return res.status(400).send({ message: "Write a comment." })
+        }
+
+        await newsService.addComment(id, comment, userId)
+        res.status(200).send({ message: "Comment successfully completed." })
+
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+export const deleteComment = async (req, res) => {
+    try {
+        const { id, idComment } = req.params
+        const userId = req.userId
+
+        const news = await newsService.deleteComment(id, idComment, userId)
+
+        const commentFinder = news.comments.find(
+            (comment) => comment.idComment === idComment
+        )
+
+        if (!commentFinder) {
+            return res.status(404).send({ message: "Comment not found" })
+        }
+
+        if (commentFinder.userId !== userId) {
+            return res.status(400).send({ message: "You can't delete this comment" })
+        }
+
+        res.send({ message: "Comment successfully removed." })
+
     } catch (error) {
         res.status(500).send({ message: error.message })
     }
